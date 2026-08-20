@@ -1,30 +1,20 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import HamburgerIcon from "./HamburgerIcon";
 import { useCycle } from "framer-motion";
 import { usePathname } from "next/navigation";
 
 const Header = () => {
   const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+
   const navItems = [
-    {
-      title: "Shop Parts",
-      link: "/shop",
-    },
-    {
-      title: "Our Services",
-      link: "/#ourservices",
-    },
-    {
-      title: "About Us",
-      link: "/about",
-    },
-    {
-      title: "Contact Us",
-      link: "/contact-us",
-    },
+    { title: "Shop Parts", link: "/shop" },
+    { title: "Our Services", link: "/#ourservices" },
+    { title: "About Us", link: "/about" },
+    { title: "Contact Us", link: "/contact-us" },
   ];
 
   const [isOpen, toggleOpen] = useCycle(false, true);
@@ -37,61 +27,90 @@ const Header = () => {
     }
   }, [isOpen]);
 
+  // Shrink header on scroll
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <header
-      className={`flex items-center justify-between relative z-50 py-10 px-5 md:px-10 lg:px-14 xl:px-28 `}
+      className={`flex items-center justify-between relative z-50 px-5 md:px-10 lg:px-14 xl:px-28 transition-all duration-300
+        ${scrolled
+          ? "py-3 bg-dark/95 backdrop-blur-md shadow-brand"
+          : "py-6 bg-transparent"
+        }`}
     >
-      {/* logo  */}
-      <Link
-        href={"/"}
-        className="flex items-center gap-x-2 select-none cursor-pointer"
-      >
-        <Image
-          src="/images/logo.svg"
-          alt="logo"
-          width={70}
-          height={70}
-          className={`w-10`}
-        />
-        <span className="font-bold text-2xl">MagestartZ</span>
-      </Link>
+      {/* Logo — Magestar PNG */}
+   {/* Logo */}
+<Link href="/" className="flex items-center select-none cursor-pointer">
+<Image
+  src="/images/magesta.png"
+  alt="Magestar Company Limited"
+  width={250}
+  height={112}
+  sizes="(max-width: 768px) 170px, 250px"
+  className={`object-contain transition-all duration-300
+    ${scrolled ? "h-10 w-auto" : "h-14 w-auto"}`}
+  priority
+/>
+</Link>
 
-      {/* hamburger icon  */}
+      {/* Hamburger — mobile only */}
       <HamburgerIcon
         isOpen={isOpen}
         toggleOpen={toggleOpen}
-        className={"md:hidden"}
-        color={"black"}
+        className="md:hidden"
+        color="white"
       />
 
-      {/* backdrop for nav  */}
+      {/* Backdrop */}
       <div
         onClick={toggleOpen}
         className={`${
-          isOpen ? "opacity-1 pointer-events-auto" : "opacity-0 pointer-events-none"
-        } fixed top-0 left-0 w-screen h-screen bg-[rgba(0,0,0,0.50)] backdrop-blur-md transition-all duration-300 z-30 lg:hidden`}
-      ></div>
+          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        } fixed top-0 left-0 w-screen h-screen bg-dark/70 backdrop-blur-md transition-all duration-300 z-30 lg:hidden`}
+      />
 
-      {/* nav  */}
+      {/* Nav */}
       <nav
-        className={`z-40 fixed top-0 right-0 w-[95vw] h-screen flex flex-col bg-primary py-10 px-5 gap-10 transition-all duration-300 ${
-          !isOpen ? "translate-x-[110%]" : "translate-x-[10%] text-black"
-        } md:flex-row md:static md:translate-x-0 md:w-auto md:h-auto md:bg-transparent md:gap-5 md:p-0`}
+        className={`z-40 fixed top-0 right-0 w-[85vw] h-screen flex flex-col bg-dark border-l border-accent/20 py-16 px-8 gap-8 transition-all duration-300
+          ${!isOpen ? "translate-x-[110%]" : "translate-x-[15%]"}
+          md:flex-row md:static md:translate-x-0 md:w-auto md:h-auto md:bg-transparent md:border-none md:gap-6 md:p-0`}
       >
-        {navItems.map((item, index) => (
-          <Link
-            onClick={() => {
-              if (isOpen) {
-                toggleOpen();
-              }
-            }}
-            className="w-fit cursor-pointer hover:text-teritiary hover:brightness-125 transition-all font-medium p-3 hover:scale-125 duration-500"
-            key={index}
-            href={item.link}
-          >
-            {item.title}
-          </Link>
-        ))}
+        {/* Mobile nav logo */}
+        <div className="md:hidden mb-4">
+          <Image
+            src="/images/magestar_clean_logo.png"
+            alt="Magestar Company Limited"
+            width={140}
+            height={48}
+            className="h-10 w-auto object-contain"
+          />
+        </div>
+
+        {navItems.map((item, index) => {
+          const isActive = pathname === item.link;
+          return (
+            <Link
+              key={index}
+              href={item.link}
+              onClick={() => { if (isOpen) toggleOpen(); }}
+              className={`relative w-fit cursor-pointer font-medium text-base transition-all duration-300
+                md:text-secondary
+                ${isActive ? "text-accent" : "text-secondary/80 hover:text-accent"}
+                group`}
+            >
+              {item.title}
+              {/* Orange underline — slides in on hover, stays on active */}
+              <span
+                className={`absolute -bottom-1 left-0 h-[2px] bg-accent transition-all duration-300
+                  ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
+              />
+            </Link>
+          );
+        })}
       </nav>
     </header>
   );

@@ -7,7 +7,8 @@ import TopSellers from "@/components/OnBoarding/top_sellers_section/TopSellers";
 
 export default function Home() {
   return (
-    <main className={`bg-primary text-secondary overflow-hidden`}>
+    // bg-dark = deep navy base; text-secondary = white — Magestar brand foundation
+    <main className="bg-dark text-secondary overflow-hidden">
       <HeroSection />
       <OurServices />
       <ShopByCatagory />
