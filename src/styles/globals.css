@@ -1,0 +1,183 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+/* ── Magestar Brand Tokens ── */
+:root {
+  --color-primary: #1a3a5c;       /* Deep steel blue */
+  --color-secondary: #ffffff;     /* White */
+  --color-accent: #f5831f;        /* Magestar orange */
+  --color-dark: #0d2236;          /* Darker navy for depth */
+  --color-muted: #e8eef4;         /* Light blue-grey for backgrounds */
+  --color-text: #1a3a5c;          /* Body text in navy */
+  --color-text-light: #6b8aa8;    /* Subdued text */
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--color-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff9f3f;
+  cursor: grabbing;
+}
+
+/* ── Gradient Title (blue-to-orange, on-brand) ── */
+.main-title {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Swipe / Carousel Buttons ── */
+.swipe-btn-prev::before {
+  content: "";
+  background-image: url("/images/arrow-left.svg");
+  background-size: cover;
+  width: 30px;
+  aspect-ratio: 1;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  z-index: 40;
+  transform: translate(10px, -50%);
+}
+
+.swipe-btn-next::before {
+  content: "";
+  background-image: url("/images/arrow-right.svg");
+  background-size: cover;
+  width: 30px;
+  aspect-ratio: 1;
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  z-index: 40;
+  transform: translate(-10px, -50%);
+}
+
+.review.swipe-btn-next::before {
+  top: 105%;
+  right: 20%;
+}
+
+.review.swipe-btn-prev::before {
+  top: 105%;
+  left: 20%;
+}
+
+@media screen and (min-width: 1024px) {
+  .swipe-btn-next::before {
+    transform: translate(-20px, -50%);
+    width: 40px;
+  }
+
+  .swipe-btn-prev::before {
+    transform: translate(20px, -50%);
+    width: 40px;
+  }
+
+  .review.swipe-btn-next::before {
+    top: 50%;
+    right: 0;
+    width: 40px;
+  }
+
+  .review.swipe-btn-prev::before {
+    top: 50%;
+    left: 0;
+    width: 40px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .swipe-btn-next::before {
+    transform: translate(-50px, -50%);
+  }
+
+  .swipe-btn-prev::before {
+    transform: translate(50px, -50%);
+  }
+}
+
+/* ── Hero Video — teal-blue tint matching Magestar photo treatment ── */
+#vedio {
+  filter: sepia(15%) hue-rotate(190deg) saturate(180%) brightness(0.85);
+  transition: all 0.5s;
+  animation: move-up 1s ease;
+  animation-timeline: scroll();
+  animation-range: 0% 100%;
+}
+
+@keyframes move-up {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+/* ── List marker ── */
+.ul::before {
+  content: "#";
+  margin-right: 10px;
+  color: var(--color-accent);
+}
+
+/* ── Hidden scrollbar ── */
+.scroll-hidden {
+  scrollbar-width: none;
+}
+
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+@media screen and (min-width: 1024px) {
+  .scroll-hidden {
+    scrollbar-width: auto;
+  }
+
+  .scroll-hidden::-webkit-scrollbar {
+    display: block;
+    width: 5px;
+  }
+
+  .scroll-hidden::-webkit-scrollbar-thumb {
+    background: var(--color-accent);
+    border-radius: 4px;
+  }
+}
+
+/* ── Utility: Orange accent underline for section headings ── */
+.section-heading::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 3px;
+  background-color: var(--color-accent);
+  margin-top: 10px;
+}
+
+/* ── Utility: Blue panel overlay (for grid/split layouts) ── */
+.blue-overlay {
+  background-color: rgba(26, 58, 92, 0.82);
+}
