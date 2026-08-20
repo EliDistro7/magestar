@@ -28,10 +28,11 @@ const AboutPage = () => {
   return (
     <section className="min-h-screen">
       {/* hero banner */}
-      <div
-        style={{ backgroundImage: "url('/images/about-bg.jpg')" }}
-        className="h-[40vh] bg-cover bg-no-repeat bg-center"
-      >
+    
+<div
+  style={{ backgroundImage: "url('/images/about-bg.jpg')" }}
+  className="h-[40vh] bg-dark bg-cover bg-no-repeat bg-center"
+>
         <div className="blue-overlay h-full w-full p-6 md:px-20 lg:px-32 xl:px-40 grid content-center gap-5 lg:gap-6">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-display text-secondary">
             About Us
