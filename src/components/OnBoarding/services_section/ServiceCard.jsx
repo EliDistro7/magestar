@@ -3,26 +3,37 @@ import React from "react";
 
 const ServiceCard = ({ src, title, href }) => {
   return (
-    <Link href={href} className="grid gap-4 place-items-center w-full group">
-      {/* Image with Magestar-style blue overlay on hover */}
-      <div className="w-[80%] h-[400px] lg:w-[300px] xl:w-full xl:max-w-[400px] xl:h-[500px] overflow-hidden relative rounded-lg">
+    <Link href={href} className="block w-full group">
+      {/* Full-bleed image container */}
+      <div className="relative w-full aspect-[3/4] overflow-hidden
+                      sm:rounded-lg">
         <img
           src={src}
           alt={title}
-          className="object-cover w-full h-full transition-all duration-700 group-hover:scale-110"
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+          className="absolute inset-0 w-full h-full object-cover
+                     transition-all duration-700
+                     group-hover:scale-105 group-hover:brightness-75"
         />
-        {/* Blue overlay — fades in on hover, matching Magestar's panel treatment */}
-        <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-all duration-500 rounded-lg" />
 
-        {/* Orange bottom strip — appears on hover */}
-        <div className="absolute bottom-0 left-0 w-0 group-hover:w-full h-[3px] bg-accent transition-all duration-500 ease-out" />
+        {/* Permanent dark scrim at bottom — always visible for legibility */}
+        <div className="absolute inset-x-0 bottom-0 h-2/5
+                        bg-gradient-to-t from-black/80 to-transparent" />
+
+        {/* Orange left-border accent — slides in on hover */}
+        <div className="absolute top-0 left-0 h-full w-[3px]
+                        bg-accent scale-y-0 group-hover:scale-y-100
+                        transition-transform duration-500 ease-out origin-bottom" />
+
+        {/* Title pinned to bottom of image */}
+        <div className="absolute inset-x-0 bottom-0 px-4 pb-5
+                        sm:px-5 sm:pb-6">
+          <p className="text-secondary font-bold uppercase tracking-[0.12em]
+                        text-sm leading-tight
+                        transition-colors duration-300 group-hover:text-accent">
+            {title}
+          </p>
+        </div>
       </div>
-
-      {/* Title */}
-      <p className="text-xl font-medium capitalize text-secondary transition-all duration-300 group-hover:text-accent">
-        {title}
-      </p>
     </Link>
   );
 };

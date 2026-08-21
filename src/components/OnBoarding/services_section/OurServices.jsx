@@ -3,32 +3,39 @@ import ServiceCard from "./ServiceCard";
 import { services } from "@/data/staticData";
 
 const OurServices = () => {
-
   return (
     <section
       id="ourservices"
-      className="px-5 py-14 grid gap-12 lg:py-24 z-10 bg-dark relative overflow-hidden"
+      className="py-14 lg:py-24 bg-dark relative z-10 overflow-hidden"
     >
-      {/* Subtle top border accent */}
-      <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-accent via-accent/40 to-transparent" />
+      {/* Top border accent */}
+      <div className="absolute top-0 left-0 w-full h-[3px]
+                      bg-gradient-to-r from-accent via-accent/40 to-transparent" />
 
-      {/* Header */}
-      <div className="flex flex-col justify-center items-start gap-2 md:flex-row md:items-center md:justify-between md:px-10">
-        {/* Title with orange underline accent */}
+      {/* Section header — padded, not the cards */}
+      <div className="px-5 md:px-10 mb-10 lg:mb-14
+                      flex items-end justify-between">
         <div>
-          <p className="text-3xl font-semibold lg:text-4xl text-secondary tracking-tight">
+          {/* Index marker — structural label */}
+          <span className="block text-accent font-bold tracking-[0.2em]
+                           text-xs uppercase mb-3">
+            01 — Services
+          </span>
+          <p className="text-4xl font-bold lg:text-5xl text-secondary
+                        tracking-tight leading-[1.05]">
             Our Services
           </p>
-          {/* Orange underline — Magestar signature */}
-          <span className="block mt-2 w-12 h-[3px] bg-accent rounded-full" />
         </div>
 
-        {/* Optional: View All button (uncomment to use) */}
-        {/* <Button inverse={true} className={"px-10"}>View All Services</Button> */}
+        {/* Decorative rule */}
+        <div className="hidden md:block h-[1px] flex-1 mx-10
+                        bg-gradient-to-r from-accent/50 to-transparent" />
       </div>
 
-      {/* Service Cards Grid */}
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4 place-items-start md:px-10">
+      {/* Cards grid — NO horizontal padding on mobile = edge-to-edge */}
+      <div className="grid grid-cols-1 gap-[2px]
+                      sm:grid-cols-2 sm:gap-4 sm:px-5
+                      xl:grid-cols-4 md:px-10">
         {services.map((service, index) => (
           <ServiceCard
             key={index}

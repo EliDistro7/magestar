@@ -9,33 +9,46 @@ const ShopByCatagory = () => {
   const router = useRouter();
 
   return (
-    <section className="px-5 py-14 grid gap-12 lg:py-24 z-10 bg-primary relative overflow-hidden">
+    <section
+      id="shopbycategory"
+      className="py-14 lg:py-24 bg-primary relative z-10 overflow-hidden"
+    >
+      {/* Top border accent — mirrored from OurServices (right-to-left) */}
+      <div className="absolute top-0 left-0 w-full h-[3px]
+                      bg-gradient-to-r from-transparent via-accent/40 to-accent" />
 
-      {/* Subtle top border accent — mirrors OurServices section */}
-      <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-accent/40 to-accent" />
-
-      {/* Header */}
-      <div className="flex flex-col justify-center items-start gap-5 md:flex-row md:items-center md:justify-between md:px-10">
-        {/* Title with orange underline */}
+      {/* Section header */}
+      <div className="px-5 md:px-10 mb-10 lg:mb-14
+                      flex items-end justify-between">
         <div>
-          <p className="text-3xl font-semibold lg:text-4xl text-secondary tracking-tight">
+          <span className="block text-accent font-bold tracking-[0.2em]
+                           text-xs uppercase mb-3">
+            02 — Category
+          </span>
+          <p className="text-4xl font-bold lg:text-5xl text-secondary
+                        tracking-tight leading-[1.05]">
             Shop by Category
           </p>
-          <span className="block mt-2 w-12 h-[3px] bg-accent rounded-full" />
         </div>
 
-        {/* Shop button */}
-        <Button
-          onClick={() => router.push("/shop")}
-          inverse={true}
-          className={"px-10"}
-        >
-          Shop
-        </Button>
+        {/* Decorative rule + CTA */}
+        <div className="hidden md:flex items-center gap-8 flex-1 ml-10">
+          <div className="h-[1px] flex-1
+                          bg-gradient-to-l from-accent/50 to-transparent" />
+          <Button
+            onClick={() => router.push("/shop")}
+            inverse={true}
+            className="px-8 shrink-0"
+          >
+            Shop All
+          </Button>
+        </div>
       </div>
 
-      {/* Category grid */}
-      <div className="grid gap-6 place-items-center md:grid-cols-2 xl:grid-cols-4 h-fit md:px-10">
+      {/* Cards — no horizontal padding on mobile for edge-to-edge bleed */}
+      <div className="grid grid-cols-1 gap-[2px]
+                      sm:grid-cols-2 sm:gap-4 sm:px-5
+                      xl:grid-cols-4 md:px-10">
         {catagories.map((cat, index) => (
           <CatagoryCard
             key={index}
@@ -44,6 +57,17 @@ const ShopByCatagory = () => {
             title={cat.title}
           />
         ))}
+      </div>
+
+      {/* Mobile-only Shop All — below the grid */}
+      <div className="mt-8 px-5 md:hidden">
+        <Button
+          onClick={() => router.push("/shop")}
+          inverse={true}
+          className="w-full"
+        >
+          Shop All
+        </Button>
       </div>
     </section>
   );
