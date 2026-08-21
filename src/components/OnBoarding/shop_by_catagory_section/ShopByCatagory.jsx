@@ -39,7 +39,7 @@ const ShopByCatagory = () => {
         {catagories.map((cat, index) => (
           <CatagoryCard
             key={index}
-            src={`/images/categories/${cat.slug}.jpg`}
+            src={`/images/services/${cat.slug}.jpeg`}
             href={`/shop/${cat.slug}`}
             title={cat.title}
           />
