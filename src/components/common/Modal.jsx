@@ -1,3 +1,4 @@
+// Modal.jsx
 import React, { useEffect, useState } from "react";
 import InputBox from "./InputBox";
 import Button from "./Button";
@@ -18,18 +19,14 @@ const Modal = ({ isOpen, setOpen, product }) => {
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = isOpen ? "hidden" : "";
   }, [isOpen]);
 
   const handleBuyNow = async () => {
     const { email, phone, make, model, engine, name } = formData;
 
     if (!email || !phone || !name) {
-      toast.error("Name , Email and Phone are required!");
+      toast.error("Name, Email and Phone are required!");
       return;
     }
 
@@ -40,9 +37,9 @@ const Modal = ({ isOpen, setOpen, product }) => {
     }
 
     const phoneRegex = /^\+?[0-9]+$/;
-    if (!phoneRegex.test(formData.phone)) {
+    if (!phoneRegex.test(phone)) {
       toast.error("Please enter a valid phone number");
-      return false;
+      return;
     }
 
     toast.loading("Loading...");
@@ -54,173 +51,147 @@ const Modal = ({ isOpen, setOpen, product }) => {
     ----------------\n
     Name: *${product?.name.toUpperCase()}*\n
     Category: *${product?.mainCategory.toUpperCase()}*\n\n
-
     Vehicle Details:\n
     ----------------\n
     ${make ? `Make: *${make.toUpperCase()}*` : ""}\n
     ${model ? `Model: *${model.toUpperCase()}*` : ""}\n
     ${engine ? `Engine: *${engine.toUpperCase()}*` : ""}\n\n
-
     User Details:\n
     -------------\n
-    Name: ${formData.name}\n
-    Email: ${formData.email}\n
-    Phone: ${formData.phone}\n
-  `;
-
-    const emailData = {
-      product,
-      formData,
-    };
+    Name: ${name}\n
+    Email: ${email}\n
+    Phone: ${phone}\n
+    `;
 
     try {
       const res = await fetch("/api/send-buy-product-mail", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(emailData),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ product, formData }),
       });
 
-      if (res.ok) {
-        toast.dismiss();
-        setLoading(false);
-        setOpen(false);
-      } else {
-        console.error("Failed to send email.");
-        toast.dismiss();
-        setLoading(false);
-        setOpen(false);
-      }
+      toast.dismiss();
+      if (!res.ok) console.error("Failed to send email.");
     } catch (error) {
       console.error("Error sending email:", error);
       toast.dismiss();
+      toast.error("Error occurred while sending email.");
+    } finally {
       setLoading(false);
       setOpen(false);
-      toast.error("Error occurred while sending email.");
     }
 
-    // Opening WhatsApp chat
-    const url = `https://wa.me/${phoneNumber}?${qs.stringify({
-      text: messageToSend,
-    })}`;
-
+    const url = `https://wa.me/${phoneNumber}?${qs.stringify({ text: messageToSend })}`;
     window.open(url, "_blank");
   };
 
   return (
     <>
-      {/* backdrop  */}
+      {/* Backdrop */}
       <div
         onClick={() => setOpen(false)}
-        className={`w-screen h-screen fixed top-0 left-0 bg-[#00000083] z-[99] transition-all duration-500 backdrop-blur-sm ${
-          isOpen
-            ? "opacity-1 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
-      ></div>
+        className={`fixed inset-0 bg-dark/75 backdrop-blur-sm z-[99] transition-all duration-300
+          ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+      />
 
-      {/* modal  */}
+      {/* Modal */}
       <div
-        className={`bg-primary w-[85%] min-h-[50%] max-w-[800px] xl:max-w-[900px] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] rounded-xl transition-all duration-500 overflow-hidden ${
-          !isOpen && "translate-y-[100%] opacity-0 pointer-events-none"
-        } md:grid md:grid-cols-2`}
+        className={`fixed top-1/2 left-1/2 -translate-x-1/2 z-[100]
+          w-[92%] max-w-[820px] xl:max-w-[920px]
+          bg-secondary rounded-sm overflow-hidden shadow-brand
+          transition-all duration-500
+          md:grid md:grid-cols-2
+          ${isOpen ? "-translate-y-1/2 opacity-100" : "translate-y-[110%] opacity-0 pointer-events-none"}`}
       >
-        {/* bestseller tag  */}
+        {/* Best Seller tag */}
         {product?.bestSeller && <BestSellerTag />}
 
-        {/* product image  */}
-        <div className="w-full h-[200px] md:h-full relative bg-primary/20">
+        {/* Product image — left panel */}
+        <div className="relative w-full h-[220px] md:h-full bg-dark">
           {product?.image && (
             <img
               src={product.image}
               alt={product?.name}
-              className="object-cover w-full h-full absolute inset-0"
+              className="absolute inset-0 w-full h-full object-cover opacity-90"
               onError={(e) => { e.target.style.display = "none"; }}
             />
           )}
+          {/* Gradient overlay for image panel */}
+          <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-dark/20 to-transparent md:bg-gradient-to-r" />
+
+          {/* Product name overlay on image — mobile only */}
+          <div className="absolute bottom-0 left-0 p-5 md:hidden">
+            <p className="text-secondary font-semibold text-lg capitalize leading-tight">
+              {product?.name}
+            </p>
+            <p className="text-secondary/60 text-xs capitalize mt-1">
+              {product?.mainCategory}
+            </p>
+          </div>
         </div>
 
-        {/* product details  */}
-        <div className="p-5 lg:p-10 ">
-          {/* product title  */}
-          <p className="capitalize font-semibold text-xl lg:text-2xl xl:text-3xl">
-            {product?.name}
-          </p>
+        {/* Right panel — form */}
+        <div className="flex flex-col bg-secondary">
+          {/* Panel header */}
+          <div className="px-6 pt-6 pb-4 border-b border-primary/10">
+            {/* Hidden on mobile — shown on desktop */}
+            <p className="hidden md:block font-semibold text-xl lg:text-2xl text-text-body capitalize leading-tight">
+              {product?.name}
+            </p>
+            <p className="hidden md:block text-text-light text-xs capitalize mt-1">
+              {product?.mainCategory}
+            </p>
 
-          {/* product category  */}
-          <p className="capitalize font-medium opacity-50 text-xs lg:text-sm xl:text-base">
-            {product?.mainCategory}
-          </p>
+            <div className="mt-3 w-8 h-[2px] bg-accent" />
+          </div>
 
-          {/* form  */}
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleBuyNow();
-            }}
-            className="grid gap-5 pt-5 lg:px-2 md:h-[80%] overflow-y-scroll scroll-hidden max-h-[300px] lg:max-h-[400px] "
-          >
-            <Divider title={"Vehicle Details"} />
+          {/* Scrollable form body */}
+          <div className="overflow-y-auto scroll-hidden flex-1 max-h-[420px] px-6 py-5">
+            <form
+              onSubmit={(e) => { e.preventDefault(); handleBuyNow(); }}
+              className="grid gap-4"
+            >
+              <Divider title="Vehicle Details" />
+              <InputBox
+                onChange={(e) => setFormData({ ...formData, make: e.target.value })}
+                placeholder="Make (e.g. Toyota)"
+              />
+              <InputBox
+                onChange={(e) => setFormData({ ...formData, model: e.target.value })}
+                placeholder="Model (e.g. Hilux)"
+              />
+              <InputBox
+                onChange={(e) => setFormData({ ...formData, engine: e.target.value })}
+                placeholder="Engine (e.g. 2.8L Diesel)"
+              />
 
-            {/* make */}
-            <InputBox
-              onChange={(e) =>
-                setFormData({ ...formData, make: e.target.value })
-              }
-              placeholder={"Enter make"}
-            />
-            {/* model */}
-            <InputBox
-              onChange={(e) =>
-                setFormData({ ...formData, model: e.target.value })
-              }
-              placeholder={"Enter model"}
-            />
-            {/* engine */}
-            <InputBox
-              onChange={(e) => {
-                setFormData({ ...formData, engine: e.target.value });
-              }}
-              placeholder={"Enter engine"}
-            />
+              <Divider title="Your Details" />
+              <InputBox
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Full name *"
+              />
+              <InputBox
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="Email address *"
+              />
+              <InputBox
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                placeholder="Phone number *"
+              />
 
-            <Divider title={"User Details"} />
-
-            {/* name */}
-            <InputBox
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              placeholder={"Enter name"} // Placeholder for the input field
-            />
-
-            {/* email */}
-            <InputBox
-              onChange={(e) => {
-                setFormData({ ...formData, email: e.target.value });
-              }}
-              placeholder={"Enter email"}
-            />
-
-            {/* phone */}
-            <InputBox
-              onChange={(e) => {
-                setFormData({ ...formData, phone: e.target.value });
-              }}
-              placeholder={"Enter phone"}
-            />
-
-            {/* button */}
-            <div className="flex justify-center">
-              <Button
+              <button
+                type="submit"
                 disabled={isLoading}
-                className={"w-[70%] py-[10px] lg:w-fit lg:px-20 "}
+                className={`w-full mt-2 py-3 rounded-sm text-sm font-semibold tracking-wide text-secondary transition-all duration-200
+                  ${isLoading
+                    ? "bg-primary/50 cursor-not-allowed"
+                    : "bg-accent hover:bg-accent-hover shadow-accent-glow hover:shadow-none"
+                  }`}
               >
-                Buy
-              </Button>
-            </div>
-          </form>
+                {isLoading ? "Sending..." : "Buy Now via WhatsApp"}
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </>
@@ -231,10 +202,10 @@ export default Modal;
 
 function Divider({ title }) {
   return (
-    <div className="flex items-center text-sm text-black/50 gap-3">
-       <div className="w-full h-[1px] bg-black/50 flex-1"></div>
-      <div>{title} </div>
-      <div className="w-full h-[1px] bg-black/50 flex-1"></div>
+    <div className="flex items-center gap-3 text-xs font-medium tracking-widest uppercase text-text-light">
+      <div className="flex-1 h-px bg-primary/15" />
+      <span>{title}</span>
+      <div className="flex-1 h-px bg-primary/15" />
     </div>
   );
 }

@@ -1,8 +1,9 @@
+// BestSellerTag.jsx
 import React from "react";
 
 const BestSellerTag = () => {
   return (
-    <div className="bg-teritiary px-5 py-2 absolute top-0 left-0 z-40 font-medium text-sm">
+    <div className="absolute top-0 left-0 z-40 bg-accent text-secondary text-[10px] font-semibold tracking-widest uppercase px-4 py-1.5">
       Best Seller
     </div>
   );
