@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from "react";
-import imageUrlBuilder from "@sanity/image-url";
-import Image from "next/image";
-import { client } from "../../../sanity/lib/client";
 import InputBox from "./InputBox";
 import Button from "./Button";
 import BestSellerTag from "./BestSellerTag";
@@ -9,7 +6,6 @@ import qs from "qs";
 import toast from "react-hot-toast";
 
 const Modal = ({ isOpen, setOpen, product }) => {
-  const builder = imageUrlBuilder(client);
   const [formData, setFormData] = useState({
     name: "",
     make: "",
@@ -134,13 +130,13 @@ const Modal = ({ isOpen, setOpen, product }) => {
         {product?.bestSeller && <BestSellerTag />}
 
         {/* product image  */}
-        <div className="w-full h-[200px] md:h-full relative">
-          {product && (
-            <Image
-              src={builder?.image(product.image).url()}
-              alt={product?.title}
-              fill
-              className="object-cover w-full h-full"
+        <div className="w-full h-[200px] md:h-full relative bg-primary/20">
+          {product?.image && (
+            <img
+              src={product.image}
+              alt={product?.name}
+              className="object-cover w-full h-full absolute inset-0"
+              onError={(e) => { e.target.style.display = "none"; }}
             />
           )}
         </div>

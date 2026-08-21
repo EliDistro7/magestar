@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -7,11 +6,11 @@ const ServiceCard = ({ src, title, href }) => {
     <Link href={href} className="grid gap-4 place-items-center w-full group">
       {/* Image with Magestar-style blue overlay on hover */}
       <div className="w-[80%] h-[400px] lg:w-[300px] xl:w-full xl:max-w-[400px] xl:h-[500px] overflow-hidden relative rounded-lg">
-        <Image
+        <img
           src={src}
           alt={title}
-          fill
           className="object-cover w-full h-full transition-all duration-700 group-hover:scale-110"
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
         />
         {/* Blue overlay — fades in on hover, matching Magestar's panel treatment */}
         <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-all duration-500 rounded-lg" />

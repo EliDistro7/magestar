@@ -4,20 +4,20 @@ import Button from "../../common/Button";
 const ThirdSection = () => {
   const points = [
     {
-      title: "Free pickup",
-      detail: "In-store or curbside — no extra charge, no waiting.",
+      title: "Broad Portfolio",
+      detail: "Dual source of supply with solid capital base — from one-time orders to recurring procurement contracts.",
     },
     {
-      title: "Personalised care",
-      detail: "Battery testing and installation handled by our team.",
+      title: "Value for Money",
+      detail: "We source economically and offer alternatives without compromising on quality or reliability.",
     },
     {
-      title: "Certified technicians",
-      detail: "Every service carried out by qualified professionals only.",
+      title: "Cost Effectiveness",
+      detail: "If items exceed your budget, we will source and offer quality alternative parts that meet your needs.",
     },
     {
-      title: "Rewards on every purchase",
-      detail: "Earn points per transaction. Redeem anytime for real value.",
+      title: "OTIF Delivery",
+      detail: "On Time In Full — we commit to delivering every order on schedule and complete, every time.",
     },
   ];
 
@@ -46,14 +46,14 @@ const ThirdSection = () => {
 
           {/* Title */}
           <h2 className="text-4xl font-bold leading-tight text-secondary md:text-5xl xl:text-6xl">
-            The One-Stop Shop for Automotive Enthusiasts
+            Delivering Greater Value Through Reliable Supply
           </h2>
 
           {/* Body */}
           <p className="text-base text-secondary/60 leading-relaxed md:text-lg max-w-[480px]">
-            Whether you&#39;re a seasoned expert or just starting out, we have
-            everything to fuel your passion for vehicles — backed by people who
-            know the trade.
+            We are an independent, owner-managed organization built on a
+            global network — sourcing quality products across Africa, Europe,
+            Asia, and beyond to keep your operations moving.
           </p>
 
           {/* CTA */}

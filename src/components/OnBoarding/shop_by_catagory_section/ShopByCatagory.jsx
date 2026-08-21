@@ -1,25 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import CatagoryCard from "./CatagoryCard";
 import Button from "../../common/Button";
 import { useRouter } from "next/navigation";
-import { client } from "../../../../sanity/lib/client";
-import imageUrlBuilder from "@sanity/image-url";
+import { categories as staticCategories } from "@/data/staticData";
 
 const ShopByCatagory = () => {
-  const [catagories, setCatagories] = useState([]);
+  const catagories = staticCategories;
   const router = useRouter();
-  const builder = imageUrlBuilder(client);
-
-  useEffect(() => {
-    const query = `*[_type == "category"]{
-      title,
-      "slug": slug.current,
-      "image": categoryImage
-    }`;
-    client.fetch(query).then((res) => {
-      setCatagories(res);
-    });
-  }, []);
 
   return (
     <section className="px-5 py-14 grid gap-12 lg:py-24 z-10 bg-primary relative overflow-hidden">
@@ -49,10 +36,10 @@ const ShopByCatagory = () => {
 
       {/* Category grid */}
       <div className="grid gap-6 place-items-center md:grid-cols-2 xl:grid-cols-4 h-fit md:px-10">
-        {catagories?.map((cat, index) => (
+        {catagories.map((cat, index) => (
           <CatagoryCard
             key={index}
-            src={builder?.image(cat.image).url()}
+            src={`/images/categories/${cat.slug}.jpg`}
             href={`/shop/${cat.slug}`}
             title={cat.title}
           />

@@ -1,24 +1,8 @@
-import React, { useEffect, useState } from "react";
-import Button from "../../common/Button";
+import React from "react";
 import ServiceCard from "./ServiceCard";
-import { client } from "../../../../sanity/lib/client";
-import imageUrlBuilder from "@sanity/image-url";
+import { services } from "@/data/staticData";
 
 const OurServices = () => {
-  const [services, setServices] = useState([]);
-  const builder = imageUrlBuilder(client);
-
-  useEffect(() => {
-    const fetchServices = async () => {
-      const serv = await client.fetch(`*[_type == "services"]{
-        title,
-        "slug": slug.current,
-        "image": serviceImage
-      }`);
-      setServices(serv);
-    };
-    fetchServices();
-  }, []);
 
   return (
     <section
@@ -45,11 +29,11 @@ const OurServices = () => {
 
       {/* Service Cards Grid */}
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4 place-items-start md:px-10">
-        {services?.map((service, index) => (
+        {services.map((service, index) => (
           <ServiceCard
             key={index}
-            src={builder?.image(service.image).url()}
-            href={'/services/' + service.slug}
+            src={service.image}
+            href={"/services/" + service.slug}
             title={service.title}
           />
         ))}

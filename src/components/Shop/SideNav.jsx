@@ -1,24 +1,15 @@
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import React from "react";
+import { useEffect } from "react";
 
 const SideNav = ({ categories, isOpen, setOpen }) => {
-  const router = useRouter();
-
-  if (!categories?.some((category) => category.title === "all products")) {
-    categories.unshift({
-      title: "all products",
-      slug: "all-products",
-    });
-  }
+  const allCategories = [
+    { title: "all products", slug: "all-products" },
+    ...categories.filter((c) => c.slug !== "all-products"),
+  ];
 
   const pathname = usePathname();
-
-  useEffect(() => {
-    if (pathname === "/shop") {
-      router.push("/shop/all-products");
-    }
-  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -56,7 +47,7 @@ const SideNav = ({ categories, isOpen, setOpen }) => {
 
           {/* Category links */}
           <nav className="grid gap-1">
-            {categories?.map((cat, index) => {
+            {allCategories.map((cat, index) => {
               const isActive = pathname === `/shop/${cat.slug}`;
               return (
                 <Link

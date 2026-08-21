@@ -35,7 +35,7 @@ export default function App({ Component, pageProps }) {
           font-family: ${poppins.style.fontFamily};
         }
       `}</style>
-      {!pathname?.includes("/studio") && <Header />}
+      <Header />
 
       <ModalContext.Provider
         value={{
@@ -48,7 +48,7 @@ export default function App({ Component, pageProps }) {
         <Component {...pageProps} />
       </ModalContext.Provider>
 
-      {!pathname?.includes("/studio") && <Footer />}
+      <Footer />
     </div>
   );
 }

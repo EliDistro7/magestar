@@ -1,26 +1,15 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useRef } from "react";
 import ProductCard from "../../common/ProductCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
-import { client } from "../../../../sanity/lib/client";
+import { products as allProducts } from "@/data/staticData";
 import { ModalContext } from "@/context/ModalContext";
 
 const TopSellers = () => {
   var swiperRef = useRef();
-  const [products, setProducts] = useState([]);
+  const products = allProducts.filter((p) => p.bestSeller);
   const { setModalOpen, setSelectedProduct } = useContext(ModalContext);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const products = await client.fetch(
-        '*[_type == "product" && bestSeller == true]{name, "image": productImage, title , mainCategory}'
-      );
-      setProducts(products);
-    };
-
-    fetchProducts();
-  }, []);
 
   return (
     <section className="h-auto max-w-screen pt-20 pb-28 z-10 bg-dark relative">
@@ -49,7 +38,7 @@ const TopSellers = () => {
           modules={[Navigation]}
           className="mySwiper w-full md:w-[80%] h-fit relative mt-10"
         >
-          {products?.map((product, index) => (
+          {products.map((product, index) => (
             <SwiperSlide key={index} className="h-full">
               <div className="w-full flex justify-center">
                 <ProductCard
@@ -58,7 +47,7 @@ const TopSellers = () => {
                     setSelectedProduct(product);
                   }}
                   mainCategory={product.mainCategory}
-                  id={product.title}
+                  id={product.name}
                   name={product.name}
                   image={product.image}
                   bestSeller={true}

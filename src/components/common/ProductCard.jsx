@@ -1,13 +1,8 @@
-import Image from "next/image";
 import React from "react";
 import Button from "./Button";
-import imageUrlBuilder from "@sanity/image-url";
-import { client } from "../../../sanity/lib/client";
 import BestSellerTag from "./BestSellerTag";
 
 const ProductCard = ({ image, name, bestSeller, id, mainCategory, onClick }) => {
-  const builder = imageUrlBuilder(client);
-
   return (
     <div
       onClick={onClick}
@@ -25,13 +20,15 @@ const ProductCard = ({ image, name, bestSeller, id, mainCategory, onClick }) => 
       {bestSeller && <BestSellerTag />}
 
       {/* image */}
-      <div className="w-full aspect-[3/3] lg:aspect-[3/3.8] overflow-hidden rounded relative">
-        <Image
-          src={builder?.image(image)?.url()}
-          alt={name}
-          fill
-          className="object-cover group-hover:scale-125 transition-all duration-500"
-        />
+      <div className="w-full aspect-[3/3] lg:aspect-[3/3.8] overflow-hidden rounded relative bg-primary/20">
+        {image && (
+          <img
+            src={image}
+            alt={name}
+            className="object-cover w-full h-full group-hover:scale-125 transition-all duration-500"
+            onError={(e) => { e.target.style.display = "none"; }}
+          />
+        )}
       </div>
 
       {/* name and button */}

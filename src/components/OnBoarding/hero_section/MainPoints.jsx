@@ -17,9 +17,7 @@ const MainPoints = ({ src, title, desc }) => {
 
       {/* Content */}
       <div className="px-3">
-        {/* Title */}
         <p className="font-medium text-secondary">{title}</p>
-        {/* Desc */}
         <p className="text-[0.9rem] font-light text-secondary/60">{desc}</p>
       </div>
     </div>

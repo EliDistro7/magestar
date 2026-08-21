@@ -1,32 +1,9 @@
-import { usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { client } from "../../../sanity/lib/client";
+import React from "react";
 
-const FilterByCat = ({ setSubFilter }) => {
-  const [subCategories, setSubCategories] = useState([]);
-  const pathname = usePathname();
-
-  useEffect(() => {
-    const fetchSubCategories = async () => {
-      const subCat = await client.fetch(
-        `*[_type == "category" && title == "${pathname
-          ?.split("/")[2]
-          .replace(/-/g, " ")}"]{subcategorie}`
-      );
-      setSubCategories(subCat[0]?.subcategorie);
-    };
-
-    if (pathname !== "/shop/all-products" && pathname !== "/shop") {
-      fetchSubCategories();
-    }
-  }, [pathname]);
-
+const FilterByCat = ({ setSubFilter, subCategories = [] }) => {
   return (
     <div className="flex items-center gap-3">
-      {/* label */}
       <p className="text-sm font-medium text-text-light">Filter:</p>
-
-      {/* select */}
       <select
         onChange={(e) => setSubFilter(e.target.value)}
         className="
@@ -41,7 +18,7 @@ const FilterByCat = ({ setSubFilter }) => {
         "
       >
         <option value="">All</option>
-        {subCategories?.map((subCat, index) => (
+        {subCategories.map((subCat, index) => (
           <option key={index} value={subCat}>
             {subCat}
           </option>
